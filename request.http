@@ -32,3 +32,19 @@ Content-Type: application/json
 GET {{ BASE_URL }}/api/auth/me
 Content-Type: application/json
 Authorization: Bearer {{ authorized }}
+
+
+###
+# init
+GET {{ BASE_URL }}/api/init
+Content-Type: application/json
+
+
+###
+# init
+POST {{ BASE_URL }}/api/init
+Content-Type: application/json
+
+{
+    "title": "axios"
+}
