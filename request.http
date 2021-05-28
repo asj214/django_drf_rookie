@@ -48,3 +48,41 @@ Content-Type: application/json
 {
     "title": "axios"
 }
+
+
+### posts.lists
+GET {{ BASE_URL }}/api/posts
+Content-Type: application/json
+
+
+### posts.create
+POST {{ BASE_URL }}/api/posts
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+{
+    "title": "hello world",
+    "body": "my father goes to the market with donkey ..."
+}
+
+
+### posts.show
+GET {{ BASE_URL }}/api/posts/1
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+
+### posts.update
+PUT {{ BASE_URL }}/api/posts/1
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+{
+    "title": "hohohohoho rorororo"
+}
+
+
+### posts.destroy
+DELETE {{ BASE_URL }}/api/posts/1
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}

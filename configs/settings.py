@@ -30,8 +30,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'corsheaders',
+    'init',
     'users',
-    'init'
+    'posts'
 ]
 
 MIDDLEWARE = [
@@ -145,6 +146,8 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'configs.exceptions.core_exception_handler',
     'NON_FIELD_ERRORS_KEY': 'error',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'configs.paginations.CustomPagination',
+    'PAGE_SIZE': 10,
 }
 
 JWT_TOKEN_EXPIRE_DAY = 30
