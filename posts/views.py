@@ -1,16 +1,19 @@
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
 from configs.utils import set_context
 from .models import Post
 from .serializers import PostSerializer
+from comments.models import Comment
+from comments.serializers import CommentSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     serializer_class = PostSerializer
-    queryset = Post.objects.prefetch_related('user').all()
+    queryset = Post.objects.relations().all()
 
     def get_queryset(self):
         return self.queryset
@@ -56,3 +59,33 @@ class PostViewSet(viewsets.ModelViewSet):
         post.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CommentListCreateView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
+    def get_queryset(self, pk=None):
+        pass
+
+    def list(self, request, pk=None, **kwargs):
+        pass
+
+    def post(self, request, pk=None, **kwargs):
+        pass
+
+
+class CommentUpdateDestoryView(APIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
+    def get_object(self, pk=None):
+        pass
+
+    def put(self, request, pk=None, **kwargs):
+        pass
+
+    def delete(self, request, pk=None, **kwargs):
+        pass
