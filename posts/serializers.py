@@ -15,3 +15,6 @@ class PostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context.get('user', None)
         return Post.objects.create(user=user, **validated_data)
+
+    def comment_create(self, validated_data):
+        return ''

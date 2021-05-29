@@ -86,3 +86,19 @@ Authorization: Bearer {{ authorized }}
 DELETE {{ BASE_URL }}/api/posts/1
 Content-Type: application/json
 Authorization: Bearer {{ authorized }}
+
+
+### posts.comments.list
+GET {{ BASE_URL }}/api/posts/1/comments
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+
+### posts.comments.create
+POST {{ BASE_URL }}/api/posts/1/comments
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+{
+    "body": "Me Too"
+}

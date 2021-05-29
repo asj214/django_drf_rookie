@@ -67,13 +67,30 @@ class CommentListCreateView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
 
     def get_queryset(self, pk=None):
-        pass
+        try:
+            return self.get_queryset().get(pk=pk)
+        except Post.DoesNotExist:
+            raise NotFound('Does not exist.')
 
     def list(self, request, pk=None, **kwargs):
-        pass
+        return Response({
+            'pk': pk
+        })
 
-    def post(self, request, pk=None, **kwargs):
-        pass
+    def create(self, request, pk=None, **kwargs):
+
+        context = set_context(request)
+
+        try:
+            context['post'] = Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise NotFound('Does not exist.')
+
+        serializer = self.serializer_class(request.data, context=context)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class CommentUpdateDestoryView(APIView):
