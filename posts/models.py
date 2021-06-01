@@ -6,7 +6,7 @@ from comments.models import Commentable
 class PostQuerySet(models.QuerySet):
 
     def relations(self):
-        return self.prefetch_related('user', 'comments__user')
+        return self.prefetch_related('user', 'comments')
 
 
 class Post(Commentable, BaseModel, SoftDeleteModel):
