@@ -100,5 +100,21 @@ Content-Type: application/json
 Authorization: Bearer {{ authorized }}
 
 {
-    "body": "Me Too"
+    "body": "Me Too!!"
 }
+
+
+### posts.comments.update
+PUT {{ BASE_URL }}/api/posts/1/comments/10
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+{
+    "body": "Nice To Meet You!!!"
+}
+
+
+### posts.comments.delete
+DELETE {{ BASE_URL }}/api/posts/1/comments/10
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}

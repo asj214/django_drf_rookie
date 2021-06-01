@@ -12,14 +12,9 @@ def str_to_bool(s):
     return False
 
 def set_context(request):
-    is_staff = False
-    if request.user is not None:
-        if request.user.is_staff:
-            is_staff = True
     return {
         'request': request,
         'user': request.user,
-        'is_staff': is_staff
     }
 
 def serializer_context(resource):
@@ -29,7 +24,6 @@ def serializer_context(resource):
         'context': None,
         'request': None,
         'user': None,
-        'is_staff': False
     }
 
     if context is None:
@@ -38,9 +32,6 @@ def serializer_context(resource):
     user = context.get('user', None)
     if user is None or not user.is_authenticated:
         return ret
-
-    if user.is_staff:
-        ret['is_staff'] = True
 
     return ret
 

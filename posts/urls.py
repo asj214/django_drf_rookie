@@ -12,7 +12,7 @@ router.register(r'posts', PostViewSet)
 
 urlpatterns = [
     path(r'posts/<int:pk>/comments', CommentListCreateView.as_view()),
-    path(r'posts/<int:pk>/comments/<int:comment_pk>', CommentUpdateDestoryView.as_view())
+    path(r'posts/<int:pk>/comments/<int:id>', CommentUpdateDestoryView.as_view())
 ]
 
 urlpatterns += router.urls

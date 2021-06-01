@@ -12,4 +12,5 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context.get('user', None)
-        return Comment.objects.create(user=user, **validated_data)
+        parent = self.context.get('parent', None)
+        return parent.comments.create(user=user, **validated_data)

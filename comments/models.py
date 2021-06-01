@@ -4,6 +4,15 @@ from django.contrib.contenttypes.models import ContentType
 from configs.models import BaseModel, SoftDeleteModel
 
 
+class CommentManager(models.Manager):
+
+    def __init__(self, *args, **kwargs):
+        super(CommentManager, self).__init__(*args, **kwargs)
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related('user').filter(deleted_at__isnull=True)
+
+
 class Comment(BaseModel, SoftDeleteModel):
     user = models.ForeignKey(
         'users.User',
@@ -27,6 +36,8 @@ class Comment(BaseModel, SoftDeleteModel):
     content_object = GenericForeignKey('commentable_type', 'commentable_id')
 
     body = models.TextField(null=False)
+
+    objects = CommentManager()
 
     class Meta:
         db_table = 'comments'
