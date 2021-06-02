@@ -47,15 +47,11 @@ class UserView(APIView):
         return Response(serializer.data)
 
 
-"""
-class CreateTokenView(CreateAPIView):
+class ReGenerateTokenView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = AccessKeySerializer
+    serializer_class = UserSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data={}, context=set_context(request))
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
+        request.user.generate_token()
+        serializer = self.serializer_class(request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-"""

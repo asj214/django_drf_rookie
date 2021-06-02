@@ -70,3 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     def delete(self):
         self.deleted_at = timezone.now()
         self.save(update_fields=['deleted_at'])
+
+    def generate_token(self):
+        self.access_token = uuid4()
+        self.save(update_fields=['access_token'])
