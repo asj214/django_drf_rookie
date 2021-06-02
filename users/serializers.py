@@ -31,6 +31,7 @@ class LoginSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=255, read_only=True)
     password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
+    access_token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
         email = data.get('email', None)
@@ -42,7 +43,7 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(_('LOGIN_PASSWORD_REQUIRED'))
 
         try:
-            user = User.objects.get(email=email, is_staff=False)
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
             raise serializers.ValidationError(_('LOGIN_EMAIL_PASSWORD_WRONG'))
 
@@ -69,12 +70,24 @@ class LoginSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(
+        max_length=128,
+        min_length=8,
+        write_only=True
+    )
+
     class Meta:
         model = User
         fields = (
             'id',
             'name',
             'email',
+            'password',
+            'is_active',
+            'is_superuser',
+            'access_token',
+            'last_login',
             'created_at',
             'updated_at'
         )

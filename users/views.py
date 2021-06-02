@@ -1,10 +1,9 @@
 from rest_framework import status
-from rest_framework.exceptions import NotFound
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import User
+from configs.utils import set_context
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 
 
@@ -13,11 +12,10 @@ class RegisterUserView(CreateAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request):
-        context = {
-            'request': request,
-        }
-
-        serializer = self.serializer_class(data=request.data, context=context)
+        serializer = self.serializer_class(
+            data=request.data,
+            context=set_context(request)
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
@@ -47,3 +45,17 @@ class UserView(APIView):
     def get(self, request):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data)
+
+
+"""
+class CreateTokenView(CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = AccessKeySerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data={}, context=set_context(request))
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+"""

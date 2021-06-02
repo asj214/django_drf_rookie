@@ -1,3 +1,4 @@
+from uuid import uuid4
 from django.contrib.auth.models import (
     BaseUserManager,
     AbstractBaseUser,
@@ -47,9 +48,9 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     email = models.EmailField(
         verbose_name=_('Email address'), max_length=255, unique=True,
     )
-    name = models.CharField(verbose_name=_('name'), max_length=30)
-    is_active = models.BooleanField(verbose_name=_('Is active'), default=True)
-    is_staff = models.BooleanField(verbose_name=_('Is staff'), default=False)
+    name = models.CharField(verbose_name='name', max_length=30)
+    is_active = models.BooleanField(verbose_name='Is active', default=True)
+    access_token = models.UUIDField('access_token', default=uuid4, unique=True)
     deleted_at = models.DateTimeField(null=True, default=None, blank=True)
 
     objects = UserManager()
@@ -62,11 +63,10 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     class Meta:
         db_table = 'users'
         ordering = ['-id']
-        default_permissions = []
 
     def __str__(self):
         return self.name
 
-    def delete(self, using=None, keep_parents=False):
+    def delete(self):
         self.deleted_at = timezone.now()
         self.save(update_fields=['deleted_at'])

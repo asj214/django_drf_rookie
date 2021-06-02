@@ -1,3 +1,6 @@
+from uuid import uuid4
+
+
 def numeric(s):
     return ''.join([n for n in s if n in '0123456789'])
 
@@ -49,3 +52,6 @@ def obj_isset(obj, key):
     if key in dir(obj):
         return True
     return False
+
+def generate_token():
+    return uuid4()

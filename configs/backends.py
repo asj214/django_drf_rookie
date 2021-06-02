@@ -4,13 +4,13 @@ from rest_framework import authentication, exceptions
 from users.models import User
 
 
-class JWTAuthentication(authentication.BaseAuthentication):
-    authentication_header_prefix = 'Bearer'
+AUTH_HEADER_PREFIX = ['Bearer', 'AccessKey']
+
+class CustomAuthentication(authentication.BaseAuthentication):
 
     def authenticate(self, request):
         request.user = None
         auth_header = authentication.get_authorization_header(request).split()
-        auth_header_prefix = self.authentication_header_prefix.lower()
 
         if not auth_header:
             return None
@@ -23,23 +23,40 @@ class JWTAuthentication(authentication.BaseAuthentication):
         prefix = auth_header[0].decode('utf-8')
         token = auth_header[1].decode('utf-8')
 
-        if prefix.lower() != auth_header_prefix:
+        if not prefix in AUTH_HEADER_PREFIX:
             return None
 
-        # token decode
+        user = None
+        if prefix.lower() == 'Bearer'.lower():
+            user = self.deserialize_jwt(token)
+        elif prefix.lower() == 'AccessKey'.lower():
+            user = self.access_token(token)
+
+        if user is None:
+            raise exceptions.AuthenticationFailed('No user matching this token was found.')
+
+        if not user.is_active:
+            raise exceptions.AuthenticationFailed('This user has been deactivated.')
+
+        return (user, token)
+
+    def deserialize_jwt(self, token):
+
         try:
             payload = jwt.decode(token, settings.SECRET_KEY)
         except:
             raise exceptions.AuthenticationFailed('Invalid authentication. Could not decode token.')
 
         try:
-            user = User.objects.get(pk=payload['id'])
+            user = User.objects.get(pk=payload['user_id'])
         except User.DoesNotExist:
-            msg = 'No user matching this token was found.'
-            raise exceptions.AuthenticationFailed(msg)
+            raise exceptions.AuthenticationFailed('No user matching this token was found.')
 
-        if not user.is_active:
-            msg = 'This user has been deactivated.'
-            raise exceptions.AuthenticationFailed(msg)
+        return user
 
-        return (user, token)
+    def access_token(self, token):
+        try:
+            user = User.objects.get(access_token=token)
+        except User.DoesNotExist:
+            raise exceptions.AuthenticationFailed('No user matching this token was found.')
+        return user        
