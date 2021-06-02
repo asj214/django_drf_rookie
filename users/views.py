@@ -1,9 +1,13 @@
-from rest_framework import status
+from rest_framework import status, viewsets
+from rest_framework.exceptions import NotFound
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django_filters import rest_framework as filters
 from configs.utils import set_context
+from configs.permissions import StaffOnly
+from .models import User
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 
 
@@ -55,3 +59,44 @@ class ReGenerateTokenView(CreateAPIView):
         request.user.generate_token()
         serializer = self.serializer_class(request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = (StaffOnly,)
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ('id', 'email')
+
+    def get_queryset(self):
+        return self.filter_queryset(self.queryset)
+
+    def get_object(self, pk=None):
+        try:
+            return self.queryset.get(pk=pk)
+        except User.DoesNotExist:
+            raise NotFound('Not Found')
+
+    def list(self, request, *args, **kwargs):
+        page = self.paginate_queryset(self.get_queryset())
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        user = self.get_object(pk)
+        serializer = self.serializer_class(user)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None, *args, **kwargs):
+        user = self.get_object(pk)
+        serializer = self.serializer_class(user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None, *args, **kwargs):
+        user = self.get_object(pk)
+        user.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
