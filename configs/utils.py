@@ -53,5 +53,6 @@ def obj_isset(obj, key):
         return True
     return False
 
+
 def generate_token():
     return uuid4()

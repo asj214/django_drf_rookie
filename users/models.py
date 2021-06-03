@@ -6,7 +6,6 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from configs.models import BaseModel
 
 
@@ -46,7 +45,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     email = models.EmailField(
-        verbose_name=_('Email address'), max_length=255, unique=True,
+        verbose_name='Email address', max_length=255, unique=True,
     )
     name = models.CharField(verbose_name='name', max_length=30)
     is_active = models.BooleanField(verbose_name='Is active', default=True)
