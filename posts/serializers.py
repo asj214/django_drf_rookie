@@ -10,7 +10,15 @@ class PostSerializer(serializers.ModelSerializer, CommentableSerializer):
 
     class Meta:
         model = Post
-        fields = ('id', 'user', 'title', 'body', 'created_at', 'updated_at', 'comments', )
+        fields = (
+            'id',
+            'user',
+            'title',
+            'body',
+            'created_at',
+            'updated_at',
+            'comments',
+        )
 
     def create(self, validated_data):
         user = self.context.get('user', None)

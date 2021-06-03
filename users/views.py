@@ -89,7 +89,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None, *args, **kwargs):
         user = self.get_object(pk)
-        serializer = self.serializer_class(user, data=request.data, partial=True)
+        serializer = self.serializer_class(
+            user,
+            data=request.data,
+            partial=True
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
