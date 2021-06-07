@@ -10,14 +10,15 @@ class CommentManager(models.Manager):
         super(CommentManager, self).__init__(*args, **kwargs)
 
     def get_queryset(self):
-        return super().get_queryset().prefetch_related('user').filter(deleted_at__isnull=True)
+        return super().get_queryset().filter(deleted_at__isnull=True)
 
 
 class Comment(BaseModel, SoftDeleteModel):
-    user = models.ForeignKey(
-        'users.User',
+    customer = models.ForeignKey(
+        'customers.Customer',
         on_delete=models.DO_NOTHING,
-        db_constraint=False
+        db_constraint=False,
+        related_name='comments'
     )
 
     commentable_type = models.ForeignKey(

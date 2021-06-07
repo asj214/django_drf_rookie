@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_jwt.settings import api_settings
 from .models import User
+from customers.serializers import CustomerSerializer
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -23,7 +24,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['email', 'name', 'password']
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        customer = self.context.get('customer', None)
+        user = User.objects.create_user(**validated_data)
+
+        if customer is not None:
+            se = CustomerSerializer(data=customer, context={'user': user})
+            se.is_valid(raise_exception=True)
+            se.save()
+
+        return user
 
 
 class LoginSerializer(serializers.Serializer):

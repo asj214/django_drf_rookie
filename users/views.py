@@ -16,9 +16,12 @@ class RegisterUserView(CreateAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request):
+        context = set_context(request)
+        context['customer'] = request.data.pop('customer')
+
         serializer = self.serializer_class(
             data=request.data,
-            context=set_context(request)
+            context=context
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()

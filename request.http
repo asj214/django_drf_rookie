@@ -7,9 +7,15 @@ POST {{ BASE_URL }}/api/auth/register
 Content-Type: application/json
 
 {
-    "email": "asj214@naver.com",
-    "name": "sjahn",
-    "password": "rewq1234"
+    "email": "abc12345@abc.com",
+    "name": "tester",
+    "password": "rewq1234",
+    "customer": {
+        "nickname": "번구개름",
+        "phone": "010-0000-0000",
+        "country": "KOR",
+        "is_advertising": true
+    }
 }
 
 
@@ -19,7 +25,7 @@ POST {{ BASE_URL }}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "asj214@naver.com",
+    "email": "abc12345@abc.com",
     "password": "rewq1234"
 }
 
@@ -32,22 +38,6 @@ Content-Type: application/json
 GET {{ BASE_URL }}/api/auth/me
 Content-Type: application/json
 Authorization: Bearer {{ authorized }}
-
-
-###
-# init
-GET {{ BASE_URL }}/api/init
-Content-Type: application/json
-
-
-###
-# init
-POST {{ BASE_URL }}/api/init
-Content-Type: application/json
-
-{
-    "title": "axios"
-}
 
 
 ### posts.lists

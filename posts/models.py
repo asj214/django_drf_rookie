@@ -3,22 +3,25 @@ from configs.models import BaseModel, SoftDeleteModel
 from comments.models import Commentable
 
 
-class PostQuerySet(models.QuerySet):
+class PostManager(models.Manager):
+    def __init__(self, *args, **kwargs):
+        super(PostManager, self).__init__(*args, **kwargs)
 
-    def relations(self):
-        return self.prefetch_related('user', 'comments')
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related('customer__user', 'comments__customer__user')
 
 
 class Post(Commentable, BaseModel, SoftDeleteModel):
-    user = models.ForeignKey(
-        'users.User',
+    customer = models.ForeignKey(
+        'customers.Customer',
         on_delete=models.DO_NOTHING,
-        db_constraint=False
+        db_constraint=False,
+        related_name='posts'
     )
     title = models.CharField(verbose_name='title', max_length=75)
     body = models.TextField()
 
-    objects = PostQuerySet.as_manager()
+    objects = PostManager()
 
     class Meta:
         db_table = 'posts'

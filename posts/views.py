@@ -13,7 +13,7 @@ from comments.serializers import CommentSerializer
 class PostViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     serializer_class = PostSerializer
-    queryset = Post.objects.relations().all()
+    queryset = Post.objects.all()
 
     def get_queryset(self):
         return self.queryset
@@ -64,7 +64,7 @@ class PostViewSet(viewsets.ModelViewSet):
 class CommentListCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     serializer_class = CommentSerializer
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.select_related('customer__user').all()
 
     def get_object(self, pk=None):
         try:
