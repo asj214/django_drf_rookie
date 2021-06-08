@@ -17,6 +17,7 @@ class CommentSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at'
         )
+        # exclude = ('commentable_id', 'commentable_type',)
 
     def create(self, validated_data):
         user = self.context.get('user', None)
