@@ -92,3 +92,12 @@ class UserSerializer(serializers.ModelSerializer):
             'updated_at'
         )
 
+class NestedUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'name',
+            'email',
+            'last_login',
+            'created_at'
+        )

@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from .models import Post
-from users.serializers import UserSerializer
+from users.serializers import NestedUserSerializer
 from comments.serializers import CommentSerializer, CommentableSerializer
 
 
 class PostSerializer(serializers.ModelSerializer, CommentableSerializer):
-    user = UserSerializer(read_only=True)
+    user = NestedUserSerializer(read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:

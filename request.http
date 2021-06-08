@@ -7,15 +7,9 @@ POST {{ BASE_URL }}/api/auth/register
 Content-Type: application/json
 
 {
-    "email": "abc12345@abc.com",
+    "email": "abc123@abc.com",
     "name": "tester",
-    "password": "rewq1234",
-    "customer": {
-        "nickname": "번구개름",
-        "phone": "010-0000-0000",
-        "country": "KOR",
-        "is_advertising": true
-    }
+    "password": "rewq1234"
 }
 
 
@@ -25,7 +19,7 @@ POST {{ BASE_URL }}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "abc12345@abc.com",
+    "email": "abc123@abc.com",
     "password": "rewq1234"
 }
 
