@@ -5,7 +5,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django_filters import rest_framework as filters
-from configs.utils import set_context
 from configs.permissions import StaffOnly
 from .models import User
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
@@ -16,13 +15,7 @@ class RegisterUserView(CreateAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request):
-        context = set_context(request)
-        context['customer'] = request.data.pop('customer')
-
-        serializer = self.serializer_class(
-            data=request.data,
-            context=context
-        )
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 

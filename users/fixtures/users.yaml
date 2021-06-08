@@ -1,0 +1,15 @@
+- model: users.user
+  pk: 1
+  fields:
+    password: pbkdf2_sha256$260000$Rkps9j1d9gOK6nwJcr7fat$X65KffwspDk0wJyTn5YPQejlLpzNsV8BvC0ZCBqR/nw=
+    last_login: null
+    is_superuser: true
+    created_at: 2021-06-08 09:02:38.546229+00:00
+    updated_at: 2021-06-08 09:02:38.547505+00:00
+    email: sjahn@ktown4u.com
+    name: sjahn
+    is_active: true
+    access_token: b7029fd0-df31-4b9c-b7d7-b7df70156276
+    deleted_at: null
+    groups: []
+    user_permissions: []

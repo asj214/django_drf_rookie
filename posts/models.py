@@ -8,12 +8,12 @@ class PostManager(models.Manager):
         super(PostManager, self).__init__(*args, **kwargs)
 
     def get_queryset(self):
-        return super().get_queryset().prefetch_related('customer__user', 'comments__customer__user')
+        return super().get_queryset().prefetch_related('user', 'comments__user')
 
 
 class Post(Commentable, BaseModel, SoftDeleteModel):
-    customer = models.ForeignKey(
-        'customers.Customer',
+    user = models.ForeignKey(
+        'users.User',
         on_delete=models.DO_NOTHING,
         db_constraint=False,
         related_name='posts'

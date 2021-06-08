@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'users',
-    'customers',
     'posts',
     'comments'
 ]
@@ -50,11 +49,7 @@ MIDDLEWARE = [
 # CORS 관련 추가
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:8000',
     'http://localhost:8080',
-    'http://localhost:8081',
-    'https://www.ktown4u.io',
-    'https://admin.ktown4u.io',
 ]
 
 ROOT_URLCONF = 'configs.urls'
@@ -159,8 +154,6 @@ JWT_AUTH = {
     # 토큰 만료 시간 설정
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_EXPIRATION_DELTA': timedelta(days=JWT_TOKEN_EXPIRE_DAY),
-    # 'JWT_VERIFY_EXPIRATION': False,
-    # 'JWT_EXPIRATION_DELTA': timedelta(minutes=1)
 }
 
 LOGGING = {

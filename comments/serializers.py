@@ -1,16 +1,16 @@
 from rest_framework import serializers
 from .models import Comment
-from customers.serializers import CustomerSerializer
+from users.serializers import UserSerializer
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    customer = CustomerSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Comment
         fields = (
             'id',
-            'customer',
+            'user',
             'commentable_id',
             'commentable_type',
             'body',
@@ -21,7 +21,7 @@ class CommentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context.get('user', None)
         parent = self.context.get('parent', None)
-        return parent.comments.create(customer=user.customer, **validated_data)
+        return parent.comments.create(user=user, **validated_data)
 
 
 class CommentableSerializer(serializers.Serializer):

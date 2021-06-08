@@ -14,8 +14,8 @@ class CommentManager(models.Manager):
 
 
 class Comment(BaseModel, SoftDeleteModel):
-    customer = models.ForeignKey(
-        'customers.Customer',
+    user = models.ForeignKey(
+        'users.User',
         on_delete=models.DO_NOTHING,
         db_constraint=False,
         related_name='comments'
