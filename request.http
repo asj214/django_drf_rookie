@@ -19,7 +19,7 @@ POST {{ BASE_URL }}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "abc123@abc.com",
+    "email": "sjahn@ktown4u.com",
     "password": "rewq1234"
 }
 
@@ -51,7 +51,7 @@ Authorization: Bearer {{ authorized }}
 
 
 ### posts.show
-GET {{ BASE_URL }}/api/posts/1
+GET {{ BASE_URL }}/api/posts/10
 Content-Type: application/json
 Authorization: Bearer {{ authorized }}
 
@@ -79,7 +79,7 @@ Authorization: Bearer {{ authorized }}
 
 
 ### posts.comments.create
-POST {{ BASE_URL }}/api/posts/1/comments
+POST {{ BASE_URL }}/api/posts/10/comments
 Content-Type: application/json
 Authorization: Bearer {{ authorized }}
 
@@ -100,5 +100,11 @@ Authorization: Bearer {{ authorized }}
 
 ### posts.comments.delete
 DELETE {{ BASE_URL }}/api/posts/1/comments/10
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+
+### banner_categories
+GET {{ BASE_URL }}/api/banner_categories
 Content-Type: application/json
 Authorization: Bearer {{ authorized }}

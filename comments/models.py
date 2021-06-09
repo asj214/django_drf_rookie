@@ -35,7 +35,6 @@ class Comment(BaseModel, SoftDeleteModel):
         db_column='commentable_id'
     )
     content_object = GenericForeignKey('commentable_type', 'commentable_id')
-
     body = models.TextField(null=False)
 
     objects = CommentManager()

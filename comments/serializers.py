@@ -17,7 +17,11 @@ class CommentSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at'
         )
-        # exclude = ('commentable_id', 'commentable_type',)
+        extra_kwargs = {
+            'commentable_id': {'write_only': True},
+            'commentable_type': {'write_only': True}
+        }
+
 
     def create(self, validated_data):
         user = self.context.get('user', None)

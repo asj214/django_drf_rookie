@@ -56,3 +56,18 @@ def obj_isset(obj, key):
 
 def generate_token():
     return uuid4()
+
+
+def make_filename(filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid4(), ext)
+    return filename
+
+
+def object_upload_files(obj, path):
+    with open(path, 'wb+') as upfile:
+        for chuck in obj.chucks():
+            upfile.write(chuck)
+
+    print(path)
+    return True

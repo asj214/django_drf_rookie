@@ -8,6 +8,8 @@ class CustomPagination(pagination.PageNumberPagination):
 
     def get_only_pagenumber(self, url):
 
+
+
         res = urlparse(url)
         qs = dict(parse_qsl(res.query))
 
@@ -22,8 +24,8 @@ class CustomPagination(pagination.PageNumberPagination):
     def get_paginated_response(self, data):
 
         return Response({
-            'next': self.get_only_pagenumber(self.get_next_link()),
-            'prev': self.get_only_pagenumber(self.get_previous_link()),
+            'next': self.get_next_link(),
+            'prev': self.get_previous_link(),
             'count': self.page.paginator.count,
             'results': data
         })
