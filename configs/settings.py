@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'users',
     'posts',
     'comments',
-    'banners'
+    'attachments',
+    'banners',
 ]
 
 MIDDLEWARE = [
@@ -125,8 +126,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_ROOT = os.path.join(STATIC_ROOT, 'uploads') # media directory in the root directory
+
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+BASE_URL = 'http://127.0.0.1:8000'
+BASE_UPLOAD_PATH = os.path.join(MEDIA_ROOT, 'uploads')
+BASE_UPLOAD_URL = '{0}/{1}/{2}'.format(BASE_URL, 'static', 'uploads')
 
 
 # Default primary key field type
@@ -145,7 +151,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
-    'EXCEPTION_HANDLER': 'configs.exceptions.core_exception_handler',
+    'EXCEPTION_HANDLER': 'configs.exception_handlers.core_exception_handler',
     'NON_FIELD_ERRORS_KEY': 'error',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'configs.paginations.CustomPagination',

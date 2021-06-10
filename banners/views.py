@@ -1,18 +1,14 @@
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
 from rest_framework import status, viewsets
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
+from configs.utils import set_context
 from configs.permissions import StaffOnly, StaffOrReadOnly
-from configs.utils import make_filename
 from .models import BannerCategory, Banner
 from .serializers import (
-    BannerCategorySerializer,
-    BannerSerializer
+    BannerSerializer,
+    BannerCategorySerializer
 )
 
-
-UPLOAD_DIR = '{0}/{1}'.format(settings.MEDIA_ROOT, 'banners')
 
 class BannerCategoryViewSet(viewsets.ModelViewSet):
     permission_classes = (StaffOnly,)
@@ -83,19 +79,14 @@ class BannerViewSet(viewsets.ModelViewSet):
         return self.get_paginated_response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        params = request.data
-        upfile = request.FILES.get('upfile', None)
-        if upfile is not None:
-            filename = make_filename(upfile.name)
-            path = '{0}/{1}'.format(UPLOAD_DIR, filename)
+        serializer = self.serializer_class(
+            data=request.data,
+            context=set_context(request)
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-            fs = FileSystemStorage(location=path)
-            file = fs.save(upfile.name, upfile)
-            fileurl = fs.url(file)
-
-            print('# url: ', fileurl)
-
-        return Response({'msg': 'hello world'})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         pass

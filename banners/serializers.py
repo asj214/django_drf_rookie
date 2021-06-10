@@ -1,7 +1,13 @@
+from django.conf import settings
 from rest_framework import serializers
+from configs.utils import upload_files
+from configs.exceptions import AttachmentUploadError
 from .models import BannerCategory, Banner
 from users.serializers import NestedUserSerializer
 
+
+
+UPLOAD_DIR = '{0}/{1}'.format(settings.BASE_UPLOAD_PATH, 'banners')
 
 class BannerCategorySerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=75)
@@ -52,7 +58,10 @@ class BannerCategorySerializer(serializers.ModelSerializer):
 class BannerSerializer(serializers.ModelSerializer):
     user = NestedUserSerializer(read_only=True)
     title = serializers.CharField(max_length=75)
+    link = serializers.URLField(default=None)
     order = serializers.IntegerField(default=1)
+    target = serializers.BooleanField(default=False)
+    image = serializers.SerializerMethodField()
     started_at = serializers.DateTimeField(default=None)
     finished_at = serializers.DateTimeField(default=None)
     is_published = serializers.BooleanField(default=False)
@@ -63,11 +72,11 @@ class BannerSerializer(serializers.ModelSerializer):
             'id',
             'banner_category',
             'user',
-            'title',
+            'image',
+            'order',
             'link',
             'target',
-            'order',
-            'image',
+            'title',
             'started_at',
             'finished_at',
             'is_published',
@@ -77,4 +86,24 @@ class BannerSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         user = self.context.get('user', None)
-        return Banner.objects.create(user=user, **validated_data)
+        request = self.context.get('request')
+        banner_category_id = request.data.get('banner_category_id')
+
+        banner = Banner.objects.create(
+            user=user,
+            banner_category_id=banner_category_id,
+            **validated_data
+        )
+
+        upfile = request.FILES.get('upfile', None)
+        if upfile is not None:
+            res = upload_files(upfile, UPLOAD_DIR)
+            if not res:
+                raise AttachmentUploadError
+            banner.image = res.get('path')
+            banner.save()
+
+        return banner
+    
+    def get_image(self, obj):
+        return '{0}/{1}'.format(settings.BASE_URL, obj.image)

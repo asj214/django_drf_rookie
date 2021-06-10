@@ -31,7 +31,7 @@ class BannerManager(models.Manager):
         super(BannerManager, self).__init__(*args, **kwargs)
 
     def get_queryset(self):
-        return super().get_queryset()
+        return super().get_queryset().prefetch_related('user')
 
     def published(self):
         return self.filter(is_published=True)

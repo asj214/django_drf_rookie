@@ -1,4 +1,6 @@
 from uuid import uuid4
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 
 def numeric(s):
@@ -18,6 +20,7 @@ def set_context(request):
     return {
         'request': request,
         'user': request.user,
+        'data': request.data
     }
 
 def serializer_context(resource):
@@ -64,10 +67,19 @@ def make_filename(filename):
     return filename
 
 
-def object_upload_files(obj, path):
-    with open(path, 'wb+') as upfile:
-        for chuck in obj.chucks():
-            upfile.write(chuck)
+def upload_files(upfile, path, escape=True):
+    base_dir = str(settings.BASE_DIR)
+    filename = upfile.name if not escape else make_filename(upfile.name)
+    upload_url = path.replace(base_dir, settings.BASE_URL)
 
-    print(path)
-    return True
+    fs = FileSystemStorage(location=path, base_url=upload_url)
+    obj = fs.save(filename, upfile)
+
+    if fs.exists(obj):
+        return {
+            'path': fs.path(obj).replace(base_dir, ''),
+            'size': fs.size(obj),
+            'url': fs.url(obj)
+        }
+    
+    return False
