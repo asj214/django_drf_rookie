@@ -34,8 +34,6 @@ class BannerCategorySerializer(serializers.ModelSerializer):
         parent_id = self.context.get('parent_id', None)
         depth = self.set_depth(parent_id)
 
-        print('### parent_id: ', parent_id)
-
         for (key, value) in validated_data.items():
             setattr(obj, key, value)
 
@@ -83,6 +81,9 @@ class BannerSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at'
         )
+        extra_kwargs = {
+            'user': {'write_only': True},
+        }
     
     def create(self, validated_data):
         user = self.context.get('user', None)
@@ -104,6 +105,48 @@ class BannerSerializer(serializers.ModelSerializer):
             banner.save()
 
         return banner
-    
+
+    def update(self, obj, validated_data):
+        request = self.context.get('request')
+        banner_category_id = request.data.get('banner_category_id')
+
+        for (key, value) in validated_data.items():
+            setattr(obj, key, value)
+        
+        obj.banner_category_id = banner_category_id
+
+        upfile = request.FILES.get('upfile', None)
+        if upfile is not None:
+            res = upload_files(upfile, UPLOAD_DIR)
+            if not res:
+                raise AttachmentUploadError
+            obj.image = res.get('path')
+
+        obj.save()
+
+        return obj
+
+    def get_image(self, obj):
+        return '{0}/{1}'.format(settings.BASE_URL, obj.image)
+
+
+class ServiceBannerSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(max_length=75)
+    link = serializers.URLField(default=None)
+    order = serializers.IntegerField(default=1)
+    target = serializers.BooleanField(default=False)
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Banner
+        fields = (
+            'id',
+            'image',
+            'order',
+            'link',
+            'target',
+            'title'
+        )
+
     def get_image(self, obj):
         return '{0}/{1}'.format(settings.BASE_URL, obj.image)

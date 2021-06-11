@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Q
+from django.utils import timezone
 from configs.models import BaseModel, SoftDeleteModel
 
 
@@ -34,8 +36,10 @@ class BannerManager(models.Manager):
         return super().get_queryset().prefetch_related('user')
 
     def published(self):
-        return self.filter(is_published=True)
+        return self.filter(
+            Q(is_published=True) & Q(started_at__gte=timezone.now()) | Q(finished_at__lte=timezone.now())
 
+        )
 
 class Banner(BaseModel, SoftDeleteModel):
     banner_category = models.ForeignKey(
