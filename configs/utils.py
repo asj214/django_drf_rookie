@@ -6,15 +6,18 @@ from django.core.files.storage import FileSystemStorage
 def numeric(s):
     return ''.join([n for n in s if n in '0123456789'])
 
+
 def is_empty(s):
     if s in [None, '', 'null']:
         return True
     return False
 
+
 def str_to_bool(s):
     if s in [1, True, 'TRUE', 'True', 'true', '1']:
         return True
     return False
+
 
 def set_context(request):
     return {
@@ -22,6 +25,7 @@ def set_context(request):
         'user': request.user,
         'data': request.data
     }
+
 
 def serializer_context(resource):
     context = resource.get('context', None)
