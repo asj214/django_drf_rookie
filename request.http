@@ -109,3 +109,55 @@ Authorization: Bearer {{ authorized }}
 GET {{ BASE_URL }}/api/banner_categories
 Content-Type: application/json
 Authorization: Bearer {{ authorized }}
+
+
+### pages.lists
+GET {{ BASE_URL }}/api/pages
+Content-Type: application/json
+
+
+### pages.create
+POST {{ BASE_URL }}/api/pages
+Content-Type: application/json
+
+{
+    "name": "회원 등록 페이지",
+    "path": "/users/create"
+}
+
+
+### menus.lists
+GET {{ BASE_URL }}/api/menus
+Content-Type: application/json
+
+
+### menus.lists
+GET {{ BASE_URL }}/api/menus/tree
+Content-Type: application/json
+
+
+### menus.create
+POST {{ BASE_URL }}/api/menus
+Content-Type: application/json
+
+{
+    "name": "회원 관리",
+    "descr": "회원 관리 페이지입니다.",
+    "parent_id": null,
+    "order": 1,
+    "is_published": true
+}
+
+
+### menus.create
+POST {{ BASE_URL }}/api/menus
+Content-Type: application/json
+
+{
+    "name": "회원 목록",
+    "descr": "회원 목록 페이지입니다.",
+    "parent_id": 1,
+    "order": 1,
+    "is_published": true,
+    "page_id": 1
+}

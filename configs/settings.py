@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'comments',
     'attachments',
     'banners',
-    'routes'
+    'menus',
+    'pages'
 ]
 
 MIDDLEWARE = [
