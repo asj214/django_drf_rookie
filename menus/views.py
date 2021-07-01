@@ -26,7 +26,10 @@ class MenuViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        context = {'parent_id': request.data.pop('parent_id', None)}
+        context = {
+            'parent_id': request.data.pop('parent_id', None),
+            'page_id': request.data.pop('page_id', None)
+        }
         serializer = self.serializer_class(data=request.data, context=context)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -35,7 +38,10 @@ class MenuViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None, *args, **kwargs):
         menu = self.get_object(pk)
-        context = {'parent_id': request.data.pop('parent_id', None)}
+        context = {
+            'parent_id': request.data.pop('parent_id', None),
+            'page_id': request.data.pop('page_id', None)
+        }
 
         serializer = self.serializer_class(
             menu,

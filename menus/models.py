@@ -27,7 +27,7 @@ class Menu(BaseModel, SoftDeleteModel):
 
     class Meta:
         db_table = 'menus'
-        ordering = ['id', 'depth', 'created_at']
+        ordering = ['depth', 'order', 'id']
         indexes = [
             models.Index(fields=['deleted_at', 'is_published']),
         ]
