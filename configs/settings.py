@@ -1,24 +1,17 @@
 import os
 from datetime import timedelta
 from pathlib import Path
+from environ import Env
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+env = Env()
+env.read_env(env_file='.env')
+
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^k94aq_8r48&k5t&hsa5i40!4#e-r#+w^@jsp1-be0pr6bp)2b'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG', default=False)
+IS_DEV_QA = env('IS_DEV_QA', default=False)
 ALLOWED_HOSTS = ['*']
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -84,10 +77,33 @@ WSGI_APPLICATION = 'configs.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'mysql.connector.django',
+        'NAME': env('MYSQL_DB_NAME'),
+        'USER': env('MYSQL_DB_USER'),
+        'PASSWORD': env('MYSQL_DB_PASSWORD'),
+        'HOST': env('MYSQL_DB_HOST'),
+        'PORT': env('MYSQL_DB_PORT'),
+        'OPTIONS': {
+            'sql_mode': 'STRICT_TRANS_TABLES',
+            'charset': 'utf8mb4',
+        },
+    },
 }
+
+USED_SQLITE3 = env('USED_SQLITE3', default=False)
+
+if USED_SQLITE3:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+# redis
+REDIS_HOST = env('REDIS_HOST', default='127.0.0.1')
+REDIS_PORT = env('REDIS_PORT', default='6379')
+REDIS_DB = env('REDIS_DB', default='0')
 
 
 # Password validation
