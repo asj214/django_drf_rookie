@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     'attachments',
     'banners',
     'menus',
-    'pages'
+    'pages',
+    'items'
 ]
 
 MIDDLEWARE = [

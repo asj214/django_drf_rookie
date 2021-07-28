@@ -162,3 +162,47 @@ Content-Type: application/json
     "is_published": true,
     "page_id": 1
 }
+
+
+### base_items.list
+GET {{ BASE_URL }}/api/base_items
+Content-Type: application/json
+
+
+### base_items.show
+GET {{ BASE_URL }}/api/base_items/2
+Content-Type: application/json
+
+
+### base_items.create general
+POST {{ BASE_URL }}/api/base_items
+Content-Type: application/json
+
+{
+    "name": "정관장 홍삼 30일",
+    "kind": "general",
+    "is_active": true
+}
+
+### base_items.create option
+POST {{ BASE_URL }}/api/base_items
+Content-Type: application/json
+
+{
+    "name": "글로 네오",
+    "kind": "option",
+    "is_active": true,
+    "options": [
+        {
+            "name": "type",
+            "values": [
+                {
+                    "name": "퍼플 부스트"
+                },
+                {
+                    "name": "프레시"
+                }
+            ]
+        }
+    ]
+}

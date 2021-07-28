@@ -53,7 +53,8 @@ class Banner(BaseModel, SoftDeleteModel):
         'users.User',
         on_delete=models.DO_NOTHING,
         db_constraint=False,
-        default=None
+        default=None,
+        related_name='banners'
     )
     title = models.CharField(verbose_name='배너명', max_length=75)
     link = models.CharField('클릭 시 이동할 페이지', null=True, blank=True, max_length=255)
@@ -63,6 +64,14 @@ class Banner(BaseModel, SoftDeleteModel):
     started_at = models.DateTimeField('시작일', null=True)
     finished_at = models.DateTimeField('종료일', null=True)
     is_published = models.BooleanField('항상 노출 설정', default=False)
+
+    mod_user = models.ForeignKey(
+        'users.User',
+        on_delete=models.DO_NOTHING,
+        db_constraint=False,
+        default=None,
+        related_name='mod_banners'
+    )
 
     objects = BannerManager()
 
