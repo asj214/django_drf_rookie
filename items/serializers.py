@@ -65,46 +65,54 @@ class BaseItemSerializer(serializers.ModelSerializer):
     
     def create_items(self, obj):
 
-        if obj.kind == 'general':
-            return obj
-
-        options = obj.options.prefetch_related('values').all()
-        opts = [[opt.id] for opt in options]
-
-        values = []
-        vals = []
-        for opt in options:
-            append = []
-            for val in opt.values.all():
-                values.append(val)
-                append.append(val.id)
-            vals.append(append)
-
-        kinds = [list(product(opts[i], vals[i])) for i in range(len(opts))]
-
         results = []
-        for kind in product(*kinds):
-            opt = []
-            for r in kind:
-                option = next(filter(lambda x: x.id == r[0], options), None)
-                value = next(filter(lambda x: x.id == r[1], values), None)
-
-                opt.append({
-                    'option_id': option.id,
-                    'option_name': option.name,
-                    'value_id': value.id,
-                    'value_name': value.name
-                })
-
-                # print('{0}: {1}'.format(r[0], r[1]))
-                # print('{0}: {1}'.format(option.id, value.id))
-
+        if obj.kind == 'general':
             results.append({
                 'base_item_id': obj.id,
                 'name': obj.name,
-                'options': opt,
+                'kind': obj.kind,
+                'is_active': obj.is_active,
+                'options': None,
                 'created_at': str(obj.created_at),
                 'updated_at': str(obj.updated_at)
             })
+        else:
+            options = obj.options.prefetch_related('values').all()
+            opts = [[opt.id] for opt in options]
+
+            values = []
+            vals = []
+            for opt in options:
+                append = []
+                for val in opt.values.all():
+                    values.append(val)
+                    append.append(val.id)
+                vals.append(append)
+
+            kinds = [list(product(opts[i], vals[i])) for i in range(len(opts))]
+
+            for kind in product(*kinds):
+                opt = []
+                for r in kind:
+                    option = next(filter(lambda x: x.id == r[0], options), None)
+                    value = next(filter(lambda x: x.id == r[1], values), None)
+
+                    opt.append({
+                        'option_id': option.id,
+                        'option_name': option.name,
+                        'value_id': value.id,
+                        'value_name': value.name
+                    })
+
+                results.append({
+                    'base_item_id': obj.id,
+                    'name': obj.name,
+                    'kind': obj.kind,
+                    'is_active': obj.is_active,
+                    'options': opt,
+                    'created_at': str(obj.created_at),
+                    'updated_at': str(obj.updated_at)
+                })
 
         print(json.dumps(results, indent=2))
+        # Item.objects.bulk_create(results) 
