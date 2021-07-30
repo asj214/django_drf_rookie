@@ -1,4 +1,4 @@
-from rest_framework import serializers, viewsets, status
+from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
@@ -27,14 +27,13 @@ class BaseItemViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         context = {
-            'options': request.data.pop('options', None)
+            'options': request.data.pop('options', [])
         }
         serializer = self.serializer_class(data=request.data, context=context)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         item = self.get_object(pk)

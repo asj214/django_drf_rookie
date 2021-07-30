@@ -13,7 +13,7 @@ class BaseItem(BaseModel, SoftDeleteModel):
         indexes = []
 
     def __str__(self):
-        return f'{self.id}: {self.name}'
+        return f'{self.id}'
 
 
 class Option(BaseModel):
@@ -30,7 +30,7 @@ class Option(BaseModel):
         ordering = ['base_item_id', 'id']
 
     def __str__(self):
-        return f'{self.id}: {self.name}'
+        return f'{self.id}'
 
 
 class Value(BaseModel):
@@ -47,7 +47,7 @@ class Value(BaseModel):
         ordering = ['option_id', 'id']
 
     def __str__(self):
-        return f'{self.id}: {self.name}'
+        return f'{self.id}'
 
 
 '''

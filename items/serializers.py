@@ -1,3 +1,5 @@
+import json
+from itertools import product
 from rest_framework import serializers
 from .models import BaseItem, Option, Value
 
@@ -48,16 +50,61 @@ class BaseItemSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        options = self.context.get('options', None)
+        options = self.context.pop('options')
         base_item = BaseItem.objects.create(**validated_data)
 
-        if options:
-            for opt in options:
-                values = opt.pop('values', None)
-                option = base_item.options.create(**opt)
+        for opt in options:
+            values = opt.pop('values', [])
+            option = base_item.options.create(**opt)
 
-                if values:
-                    for val in values:
-                        option.values.create(**val)
+            for val in values:
+                option.values.create(**val)
 
+        self.create_items(base_item)
         return base_item
+    
+    def create_items(self, obj):
+
+        if obj.kind == 'general':
+            return obj
+
+        options = obj.options.prefetch_related('values').all()
+        opts = [[opt.id] for opt in options]
+
+        values = []
+        vals = []
+        for opt in options:
+            append = []
+            for val in opt.values.all():
+                values.append(val)
+                append.append(val.id)
+            vals.append(append)
+
+        kinds = [list(product(opts[i], vals[i])) for i in range(len(opts))]
+
+        results = []
+        for kind in product(*kinds):
+            opt = []
+            for r in kind:
+                option = next(filter(lambda x: x.id == r[0], options), None)
+                value = next(filter(lambda x: x.id == r[1], values), None)
+
+                opt.append({
+                    'option_id': option.id,
+                    'option_name': option.name,
+                    'value_id': value.id,
+                    'value_name': value.name
+                })
+
+                # print('{0}: {1}'.format(r[0], r[1]))
+                # print('{0}: {1}'.format(option.id, value.id))
+
+            results.append({
+                'base_item_id': obj.id,
+                'name': obj.name,
+                'options': opt,
+                'created_at': str(obj.created_at),
+                'updated_at': str(obj.updated_at)
+            })
+
+        print(json.dumps(results, indent=2))

@@ -170,7 +170,7 @@ Content-Type: application/json
 
 
 ### base_items.show
-GET {{ BASE_URL }}/api/base_items/2
+GET {{ BASE_URL }}/api/base_items/34
 Content-Type: application/json
 
 
@@ -201,6 +201,88 @@ Content-Type: application/json
                 },
                 {
                     "name": "프레시"
+                }
+            ]
+        }
+    ]
+}
+
+
+### base_items.create option
+POST {{ BASE_URL }}/api/base_items
+Content-Type: application/json
+
+{
+    "name": "무지 티셔츠",
+    "kind": "option",
+    "is_active": true,
+    "options": [
+        {
+            "name": "color",
+            "values": [
+                {
+                    "name": "White"
+                },
+                {
+                    "name": "Black"
+                }
+            ]
+        },
+        {
+            "name": "size",
+            "values": [
+                {
+                    "name": "M"
+                },
+                {
+                    "name": "L"
+                }
+            ]
+        }
+    ]
+}
+
+
+
+### base_items.create option
+POST {{ BASE_URL }}/api/base_items
+Content-Type: application/json
+
+{
+    "name": "무지 티셔츠",
+    "kind": "option",
+    "is_active": true,
+    "options": [
+        {
+            "name": "color",
+            "values": [
+                {
+                    "name": "White"
+                },
+                {
+                    "name": "Black"
+                }
+            ]
+        },
+        {
+            "name": "size",
+            "values": [
+                {
+                    "name": "M"
+                },
+                {
+                    "name": "L"
+                }
+            ]
+        },
+        {
+            "name": "gender",
+            "values": [
+                {
+                    "name": "M"
+                },
+                {
+                    "name": "F"
                 }
             ]
         }
