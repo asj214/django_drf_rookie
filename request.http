@@ -34,3 +34,57 @@ GET {{ BASE_URL }}/api/auth/me
 Content-Type: application/json
 Authorization: Bearer {{ authorized }}
 
+
+###
+# posts.list
+GET {{ BASE_URL }}/api/posts
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+
+###
+# posts.create
+POST {{ BASE_URL }}/api/posts
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+{
+    "title": "Hello World",
+    "body": "hohohoho"
+}
+
+
+###
+# posts.update
+PUT {{ BASE_URL }}/api/posts/8
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+{
+    "title": "forever",
+    "body": "...."
+}
+
+
+###
+# posts.show
+GET {{ BASE_URL }}/api/posts/8
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+###
+# posts.remove
+DELETE {{ BASE_URL }}/api/posts/7
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+
+###
+# posts.comments.create
+POST {{ BASE_URL }}/api/posts/8/comments
+Content-Type: application/json
+Authorization: Bearer {{ authorized }}
+
+{
+    "body": "Me too"
+}

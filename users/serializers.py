@@ -92,7 +92,7 @@ class UserSerializer(serializers.ModelSerializer):
             'updated_at'
         )
 
-class NestedUserSerializer(serializers.ModelSerializer):
+class RelatedUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
