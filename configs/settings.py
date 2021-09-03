@@ -22,17 +22,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_filters',
     'django_extensions',
-    'drf_yasg',
     'rest_framework',
-    'corsheaders',
     'users',
     'posts',
     'comments',
     'attachments',
     'banners',
-    'menus',
-    'pages',
-    'items'
 ]
 
 MIDDLEWARE = [
@@ -43,7 +38,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 # CORS 관련 추가
@@ -90,22 +84,6 @@ DATABASES = {
         },
     },
 }
-
-USED_SQLITE3 = env('USED_SQLITE3', default=False)
-
-if USED_SQLITE3:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-
-# redis
-REDIS_HOST = env('REDIS_HOST', default='127.0.0.1')
-REDIS_PORT = env('REDIS_PORT', default='6379')
-REDIS_DB = env('REDIS_DB', default='0')
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
