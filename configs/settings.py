@@ -184,3 +184,10 @@ LOGGING = {
         },
     }
 }
+
+AWS_ACCESS_KEY = env('AWS_ACCESS_KEY', default='AWS_ACCESS_KEY')
+AWS_SECRET_KEY = env('AWS_SECRET_KEY', default='AWS_SECRET_KEY')
+
+S3_BUCKET_NAME = env('S3_BUCKET_NAME', default='S3_BUCKET_NAME')
+
+S3_URL = 'https://s3.ap-northeast-2.amazonaws.com/{0}/'.format(S3_BUCKET_NAME)
