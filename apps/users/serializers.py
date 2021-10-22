@@ -26,26 +26,26 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('LOGIN_PASSWORD_REQUIRED')
 
         try:
-            User = User.objects.get(email=email)
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
             raise serializers.ValidationError('LOGIN_EMAIL_PASSWORD_WRONG')
 
-        if not User.check_password(password):
+        if not user.check_password(password):
             raise serializers.ValidationError('LOGIN_EMAIL_PASSWORD_WRONG')
 
-        User.last_login = timezone.now()
-        User.save()
+        user.last_login = timezone.now()
+        user.save()
 
         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-        payload = jwt_payload_handler(User)
+        payload = jwt_payload_handler(user)
         token = jwt.encode(
             payload,
             base64.b64decode(settings.SECRET_KEY),
             algorithm=settings.JWT_ALGORITHM
         )
-        User.token = token.decode()
+        user.token = token.decode()
 
-        return User
+        return user
 
 
 class UserSerializer(serializers.ModelSerializer):

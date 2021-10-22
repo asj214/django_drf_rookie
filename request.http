@@ -1,0 +1,46 @@
+@BASE_URL = http://127.0.0.1:8000
+
+
+###
+# @name login
+POST {{ BASE_URL }}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "asj214@naver.com",
+    "password": "rewq1234"
+}
+
+###
+@token = {{ login.response.body.token }}
+
+
+###
+GET {{ BASE_URL }}/api/auth/me
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+
+###
+GET {{ BASE_URL }}/api/categories
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+
+###
+POST {{ BASE_URL }}/api/categories
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+{
+    "parent_id": 3,
+    "name": "슈트 팬츠/슬랙스",
+    "depth": 2,
+    "order": 2,
+    "is_active": true
+}
+
+###
+GET {{ BASE_URL }}/api/categories/4
+Content-Type: application/json
+Authorization: Bearer {{ token }}
