@@ -14,17 +14,9 @@ class Coupon(BaseModel, SoftDeleteModel):
     max_discount = models.BigIntegerField('최대 할인 금액', null=True, default=0)
     expired_at = models.DateTimeField('만료일', null=True,)
     is_all_category = models.BooleanField('전체 카테고리 적용 여부', default=True)
-    categories = models.ManyToManyField(
-        'categories.Category',
-        related_name='coupons',
-        db_constraint=False,
-    )
+    categories = models.JSONField('카테고리 아이디 list', default=None)
     is_all_product = models.BooleanField('전체 상품 적용 여부', default=True)
-    products = models.ManyToManyField(
-        'products.Product',
-        related_name='coupons',
-        db_constraint=False,
-    )
+    products = models.JSONField('상품 아이디 list', default=None)
     is_active = models.BooleanField('사용 여부', default=False)
 
     class Meta:
