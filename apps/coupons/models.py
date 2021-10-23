@@ -10,6 +10,7 @@ class Coupon(BaseModel, SoftDeleteModel):
     )
     name = models.CharField('쿠폰명', max_length=256)
     is_fixed_discount = models.BooleanField('고정할인 여부', default=False)
+    discount = models.BigIntegerField('할인액', null=True, default=0)
     min_order_price = models.BigIntegerField('최소 주문 금액', null=True, default=0)
     max_discount = models.BigIntegerField('최대 할인 금액', null=True, default=0)
     expired_at = models.DateTimeField('만료일', null=True,)
