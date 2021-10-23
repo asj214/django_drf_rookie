@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     'django_filters',
     'apps.users',
     'apps.categories',
-    'apps.products'
+    'apps.products',
+    'apps.coupons'
 ]
 
 MIDDLEWARE = [

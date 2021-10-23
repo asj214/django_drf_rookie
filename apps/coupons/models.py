@@ -13,16 +13,26 @@ class Coupon(BaseModel, SoftDeleteModel):
     min_order_price = models.BigIntegerField('최소 주문 금액', null=True, default=0)
     max_discount = models.BigIntegerField('최대 할인 금액', null=True, default=0)
     expired_at = models.DateTimeField('만료일', null=True,)
-    ignore_categories = models.ManyToManyField(
+    is_all_category = models.BooleanField('전체 카테고리 적용 여부', default=True)
+    categories = models.ManyToManyField(
         'categories.Category',
-        related_name='ignore_coupons',
+        related_name='coupons',
         db_constraint=False,
     )
+    is_all_product = models.BooleanField('전체 상품 적용 여부', default=True)
+    products = models.ManyToManyField(
+        'products.Product',
+        related_name='coupons',
+        db_constraint=False,
+    )
+    is_active = models.BooleanField('사용 여부', default=False)
 
     class Meta:
         db_table = 'coupons'
         ordering = ['-id']
-        indexes = []
+        indexes = [
+            models.Index(fields=['is_active', 'deleted_at',], name='active_coupons'),
+        ]
 
     def __str__(self):
         return f'{self.id}'

@@ -71,3 +71,25 @@ Authorization: Bearer {{ token }}
 GET {{ BASE_URL }}/api/products/1
 Content-Type: application/json
 Authorization: Bearer {{ token }}
+
+
+###
+GET {{ BASE_URL }}/api/coupons
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+
+###
+POST {{ BASE_URL }}/api/coupons
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+
+{
+    "name": "카테고리 연결 안된 상품명",
+    "description": "상품 설명",
+    "categories": [],
+    "products": [],
+    "price": 10000,
+    "is_active": true,
+    "is_published": true
+}
