@@ -49,3 +49,18 @@ class CategorySerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class RelatedCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = (
+            'id',
+            'parent_id',
+            'name',
+            'depth',
+            'order',
+            'is_active',
+            'created_at',
+            'updated_at',
+        )
